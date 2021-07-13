@@ -20,6 +20,10 @@ toio-cube-marker/[Aa]ssets/toio-sdk/*
 toio-cube-marker/[Aa]ssets/toio-sdk.meta
 toio-cube-marker/[Aa]ssets/WebGLTemplates/*
 toio-cube-marker/[Aa]ssets/WebGLTemplates.meta
+toio-cube-marker/[Aa]ssets/Photon/*
+toio-cube-marker/[Aa]ssets/Photon.meta
+toio-cube-marker/[Aa]ssets/Joystick Pack/*
+toio-cube-marker/[Aa]ssets/Joystick Pack.meta
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !toio-cube-marker/[Aa]ssets/toio-cube-marker/**/*.meta
