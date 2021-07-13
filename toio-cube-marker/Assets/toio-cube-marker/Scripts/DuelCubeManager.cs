@@ -23,15 +23,19 @@ namespace CubeMarker
         void Awake()
         {
             DuelCubeManager.ins = this;
+            simManager = new CubeManager(ConnectType.Simulator);
+            realManager = new CubeManager(ConnectType.Real);
         }
         #endregion
 
+        public CubeManager simManager;
+        public CubeManager realManager;
 
         private List<GameObject> simCubeObjs = new List<GameObject>();
-        private List<Cube> simCubes = new List<Cube>();
-        private List<CubeHandle> simHandles = new List<CubeHandle>();
-        private List<Cube> realCubes = new List<Cube>();
-        private List<CubeHandle> realHandles = new List<CubeHandle>();
+        // private List<Cube> simCubes = new List<Cube>();
+        // private List<CubeHandle> simHandles = new List<CubeHandle>();
+        // // private List<Cube> RealCubes = new List<Cube>();
+        // private List<CubeHandle> realHandles = new List<CubeHandle>();
 
 
         public bool isReal { get; set;} = false;
@@ -46,21 +50,15 @@ namespace CubeMarker
         public Action<Cube, BLEPeripheralInterface> DisconnectedCallback = null;
 
 
-        public List<Cube> Cubes { get {
-            if (isReal) return realCubes;
-            return simCubes;
-        } }
-        public List<CubeHandle> Handles { get {
-            if (isReal) return realHandles;
-            return simHandles;
-        } }
+        public List<Cube> Cubes { get { return isReal? realManager.cubes : simManager.cubes; } }
+        public List<Cube> RealCubes { get { return realManager.cubes; } }
+        public List<Cube> SimCubes { get { return simManager.cubes; } }
+        public List<CubeHandle> Handles { get { return isReal? realManager.handles : simManager.handles; } }
+        public List<CubeHandle> RealHandles { get { return simManager.handles; } }
+        public List<CubeHandle> SimHandles { get { return realManager.handles; } }
 
-        public Cube[] GetRealCubes()
-        {
-            return realCubes.ToArray();
-        }
 
-        public int NumRealCubes { get {return realCubes.Count;} }
+        public int NumRealCubes { get {return RealCubes.Count;} }
         public int NumCubes { get {return Cubes.Count;} }
 
 
@@ -68,7 +66,7 @@ namespace CubeMarker
         {
             if (isReal)
             {
-                return realCubes.Count >= num;
+                return NumRealCubes >= num;
             }
             else
             {
@@ -83,20 +81,15 @@ namespace CubeMarker
             SetIDCallback(null);
             SetStandardIDCallback(null);
 
-            if (isReal) {}
-            else
-            {
-                ClearSimCubes();
-            }
+            ClearSimCubes();
         }
 
 
         public Vector3Int GetPose(byte idx)
         {
-            var cubes = Cubes;
-            if (idx < cubes.Count)
+            if (idx < NumCubes)
             {
-                var cube = cubes[idx];
+                var cube = Cubes[idx];
                 return new Vector3Int(cube.x, cube.y, cube.angle);
             }
             else return Vector3Int.zero;
@@ -116,12 +109,11 @@ namespace CubeMarker
 
         public void MoveHome(Vector3Int[] homes)
         {
-            var cubes = Cubes;
-            for (int i=0; i<cubes.Count; i++)
+            for (int i=0; i < NumCubes; i++)
             {
                 if (i >= homes.Length) break;
                 var home = homes[i];
-                var cube = cubes[i];
+                var cube = Cubes[i];
                 cube.TargetMove(home.x, home.y, home.z);
             }
         }
@@ -133,12 +125,10 @@ namespace CubeMarker
             }
         }
 
-        private CubeHandle CreateCubeHandle(Cube cube)
+        private void SetHandleBorder(CubeHandle handle)
         {
-            var h = new CubeHandle(cube);
             var margin = 11;
-            h.borderRect = new RectInt(98 + margin, 142 + margin, 304 - margin*2, 216 - margin*2);
-            return h;
+            handle.borderRect = new RectInt(98 + margin, 142 + margin, 304 - margin*2, 216 - margin*2);
         }
 
 
@@ -157,25 +147,28 @@ namespace CubeMarker
             }
 
             // Scan, Connect
-            var peripherals = await new NearScanner(num, alwaysSim: true).Scan();
-            var cubes = await new CubeConnecter(alwaysSim: true).Connect(peripherals);
+            var cubes = await simManager.MultiConnect(num);
+            // Set callbacks
             foreach (var cube in cubes)
             {
-                simCubes.Add(cube);
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
-                simHandles.Add(CreateCubeHandle(cube));
             }
+            // Set border
+            foreach (var handle in SimHandles)
+                SetHandleBorder(handle);
 
             isSimConnecting = false;
             isSimConnected = true;
         }
         public void ClearSimCubes()
         {
-            simCubes.Clear();
+            simManager.cubes.Clear();
+            simManager.cubeTable.Clear();
+            simManager.handles.Clear();
+            simManager.navigators.Clear();
             foreach (var cubeObj in simCubeObjs) Destroy(cubeObj);
             simCubeObjs.Clear();
-            simHandles.Clear();
         }
 
         #endregion Sim Connection
@@ -185,79 +178,59 @@ namespace CubeMarker
         #region ====== Real Connection ======
         public async UniTask<Cube[]> SingleConnectRealCube()
         {
-            if (NumRealCubes >= 4) return realCubes.ToArray();
+            if (NumRealCubes >= 4) return RealCubes.ToArray();
 
             isRealConnecting = true;
 
-            var peri = await new NearestScanner().Scan();
-            if (peri == null)
-            {
-                isRealConnecting = false;
-                return realCubes.ToArray();
-            }
-            peri.AddConnectionListener("DuelCubeManager", this.OnPeripheralConnection);
-
             // Connect
-            var cube = await new CubeConnecter().Connect(peri);
+            var cube = await realManager.SingleConnect();
+            // Set callbacks
             if (cube != null)
             {
-                realCubes.Add(cube);
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
-                realHandles.Add(CreateCubeHandle(cube));
             }
+            // Set border
+            foreach (var handle in RealHandles)
+                SetHandleBorder(handle);
 
             isRealConnecting = false;
 
-            if (NumRealCubes > 0) isRealConnected = true;
+            isRealConnected = NumRealCubes > 0;
 
-            return realCubes.ToArray();
+            return RealCubes.ToArray();
         }
 
 
         public async UniTask<Cube[]> MultiConnectRealCubes(int num = 4)
         {
-            if (isRealConnected) return realCubes.ToArray();
+            if (isRealConnected) return RealCubes.ToArray();
 
             isRealConnecting = true;
 
-            var peripherals = await new NearScanner(num).Scan();
-            foreach (var peri in peripherals)
-                peri.AddConnectionListener("DuelCubeManager", this.OnPeripheralConnection);
-
             // Connect
-            var cubes = await new CubeConnecter().Connect(peripherals);
+            var cubes = await realManager.MultiConnect(num);
+            // Set callbacks
             foreach (var cube in cubes)
             {
-                realCubes.Add(cube);
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
-                realHandles.Add(CreateCubeHandle(cube));
             }
+            // Set border
+            foreach (var handle in RealHandles)
+                SetHandleBorder(handle);
 
             isRealConnecting = false;
 
-            if (cubes.Length > 0) isRealConnected = true;
-            Debug.Log("Connect Over. cubes=" + realCubes.Count);
+            isRealConnected = cubes.Length > 0;
 
-            return realCubes.ToArray();
+            return RealCubes.ToArray();
         }
 
         public void DisconnectRealCubes()
         {
-            foreach (var cube in realCubes)
-            {
-                var peri = (cube as CubeReal).peripheral;
-                peri?.Disconnect();
-            }
-            realCubes.Clear();
-            realHandles.Clear();
+            foreach (var cube in RealCubes)
             isRealConnected = false;
-        }
-
-        private void OnPeripheralConnection(BLEPeripheralInterface peri)
-        {
-            Debug.Log("On peri connection: " + peri.device_address + "  " + peri.isConnected);
         }
 
         #endregion ====== Real Connection ======

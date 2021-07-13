@@ -44,10 +44,9 @@ namespace CubeMarker
         {
             if (DuelCubeManager.Ins.NumRealCubes == 0) return;
 
-            var cubes = DuelCubeManager.Ins.GetRealCubes();
             for (int i=0; i<DuelCubeManager.Ins.NumRealCubes; i++)
             {
-                var cube = cubes[i];
+                var cube = DuelCubeManager.Ins.RealCubes[i];
                 switch (i){
                     case 0: info0.SetPos(cube.x, cube.y, cube.angle); break;
                     case 1: info1.SetPos(cube.x, cube.y, cube.angle); break;
@@ -123,8 +122,8 @@ namespace CubeMarker
             {
                 btnOK.interactable = true; btnConnect.interactable = true;
                 landmarkRed.gameObject.SetActive(false); landmarkBlue.gameObject.SetActive(false);
-                var cubes = DuelCubeManager.Ins.GetRealCubes();
-                if (cubes.Length > 0) cubes[0].TurnLedOff();
+                var cubes = DuelCubeManager.Ins.RealCubes;
+                if (cubes.Count > 0) cubes[0].TurnLedOff();
                 btnCalibrate.transform.GetComponentInChildren<TMP_Text>().text = "Calibrate";
                 tipCalibrate.text = "If you overlay a mat on a monitor, press the button above to adjust the size.\n\n開発マットをモニター上に敷く場合、上のボタンを押してサイズを調整してください。";
             }
@@ -132,7 +131,7 @@ namespace CubeMarker
             {
                 btnOK.interactable = false; btnConnect.interactable = false;
                 landmarkRed.gameObject.SetActive(true); landmarkBlue.gameObject.SetActive(false);
-                DuelCubeManager.Ins.GetRealCubes()[0].TurnLedOn(255, 0, 0, 0);
+                DuelCubeManager.Ins.RealCubes[0].TurnLedOn(255, 0, 0, 0);
                 btnCalibrate.transform.GetComponentInChildren<TMP_Text>().text = "Next";
                 tipCalibrate.text = "Put the cube with red LED on the mark.\n\n赤く点灯しているキューブをマークに重ねてください。";
             }
@@ -140,7 +139,7 @@ namespace CubeMarker
             {
                 btnOK.interactable = false; btnConnect.interactable = false;
                 landmarkRed.gameObject.SetActive(false); landmarkBlue.gameObject.SetActive(true);
-                DuelCubeManager.Ins.GetRealCubes()[0].TurnLedOn(0, 0, 255, 0);
+                DuelCubeManager.Ins.RealCubes[0].TurnLedOn(0, 0, 255, 0);
                 btnCalibrate.transform.GetComponentInChildren<TMP_Text>().text = "OK";
                 tipCalibrate.text = "Put the cube with blue LED on the mark.\n\n青く点灯しているキューブをマークに重ねてください。";
             }
@@ -198,7 +197,7 @@ namespace CubeMarker
             if (DuelCubeManager.Ins.isRealConnecting || !DuelCubeManager.Ins.isRealConnected) return;
 
             // Process
-            var cube = DuelCubeManager.Ins.GetRealCubes()[0];
+            var cube = DuelCubeManager.Ins.RealCubes[0];
             if (calibPhase == 1)
             {
                 redX = cube.x; redY = cube.y; redDeg = cube.angle;
