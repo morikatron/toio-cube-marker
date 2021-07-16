@@ -30,13 +30,7 @@ namespace CubeMarker
 
         public CubeManager simManager;
         public CubeManager realManager;
-
         private List<GameObject> simCubeObjs = new List<GameObject>();
-        // private List<Cube> simCubes = new List<Cube>();
-        // private List<CubeHandle> simHandles = new List<CubeHandle>();
-        // // private List<Cube> RealCubes = new List<Cube>();
-        // private List<CubeHandle> realHandles = new List<CubeHandle>();
-
 
         public bool isReal { get; set;} = false;
         public bool isConnecting { get {return isReal? isRealConnecting : isSimConnecting;} }

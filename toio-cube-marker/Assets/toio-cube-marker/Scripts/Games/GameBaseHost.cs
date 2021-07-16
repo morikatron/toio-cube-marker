@@ -292,13 +292,36 @@ namespace CubeMarker
         #endregion
 
 
+        readonly Vector3Int home_left_top = new Vector3Int(121, 165, 90);
+        readonly Vector3Int home_right_top = new Vector3Int(370, 165, 90);
+        readonly Vector3Int home_left_bottom = new Vector3Int(121, 322, 270);
+        readonly Vector3Int home_right_bottom = new Vector3Int(370, 322, 270);
         protected virtual void InitHomePoses()
         {
             homePoses.Clear();
-            homePoses.Add(new Vector3Int(121, 165, 90));
-            homePoses.Add(new Vector3Int(370, 165, 90));
-            homePoses.Add(new Vector3Int(121, 322, 270));
-            homePoses.Add(new Vector3Int(370, 322, 270));
+            var n = NetworkManager.pidCount;
+            if (n == 1)
+            {
+                homePoses.Add(home_right_bottom);
+            }
+            else if (n == 2)
+            {
+                homePoses.Add(home_right_bottom);
+                homePoses.Add(home_left_bottom);
+            }
+            else if (n == 3)
+            {
+                homePoses.Add(home_right_bottom);
+                homePoses.Add(home_right_top);
+                homePoses.Add(home_left_bottom);
+            }
+            else if (n == 4)
+            {
+                homePoses.Add(home_right_bottom);
+                homePoses.Add(home_right_top);
+                homePoses.Add(home_left_bottom);
+                homePoses.Add(home_left_top);
+            }
         }
 
         protected virtual void CastResult() {}
