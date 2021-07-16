@@ -30,7 +30,7 @@ namespace CubeMarker
 
             // Make Random Target
             Vector2 pos = new Vector2(obs.pose.x, obs.pose.y);
-            if (tar == Vector2.zero || (tar-pos).magnitude < 25 || tarStartTime-Time.time > 3+Random.Range(-1,1))
+            if (tar == Vector2.zero || (tar-pos).magnitude < 25 || Time.time-tarStartTime > 3+Random.Range(-1,1))
             {
                 tar = new Vector2( Random.Range(xMin, xMax), Random.Range(yMin, yMax) );
                 tarStartTime = Time.time;
