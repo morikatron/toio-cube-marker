@@ -44,12 +44,12 @@ namespace CubeMarker
         public Action<Cube, BLEPeripheralInterface> DisconnectedCallback = null;
 
 
-        public List<Cube> Cubes { get { return isReal? realManager.cubes : simManager.cubes; } }
-        public List<Cube> RealCubes { get { return realManager.cubes; } }
-        public List<Cube> SimCubes { get { return simManager.cubes; } }
-        public List<CubeHandle> Handles { get { return isReal? realManager.handles : simManager.handles; } }
-        public List<CubeHandle> RealHandles { get { return simManager.handles; } }
-        public List<CubeHandle> SimHandles { get { return realManager.handles; } }
+        public List<Cube> Cubes { get { return isReal? realManager.connectedCubes : simManager.connectedCubes; } }
+        public List<Cube> RealCubes { get { return realManager.connectedCubes; } }
+        public List<Cube> SimCubes { get { return simManager.connectedCubes; } }
+        public List<CubeHandle> Handles { get { return isReal? realManager.connectedHandles : simManager.connectedHandles; } }
+        public List<CubeHandle> RealHandles { get { return realManager.connectedHandles; } }
+        public List<CubeHandle> SimHandles { get { return simManager.connectedHandles; } }
 
 
         public int NumRealCubes { get {return RealCubes.Count;} }
@@ -121,7 +121,7 @@ namespace CubeMarker
 
         private void SetHandleBorder(CubeHandle handle)
         {
-            var margin = 11;
+            var margin = 5;
             handle.borderRect = new RectInt(98 + margin, 142 + margin, 304 - margin*2, 216 - margin*2);
         }
 
