@@ -40,13 +40,18 @@ namespace CubeMarker
         private int calibPhase = 0;
 
 
+        float elipsed = 0;
         void Update()
         {
-            if (DuelCubeManager.Ins.NumRealCubes == 0) return;
+            elipsed += Time.deltaTime;
+            if (elipsed < 0.25f) return;
+            elipsed = 0;
+            var connectedCubes = DuelCubeManager.Ins.RealCubes;
+            if (connectedCubes.Count == 0) return;
 
-            for (int i=0; i<DuelCubeManager.Ins.NumRealCubes; i++)
+            for (int i=0; i<connectedCubes.Count; i++)
             {
-                var cube = DuelCubeManager.Ins.RealCubes[i];
+                var cube = connectedCubes[i];
                 switch (i){
                     case 0: info0.SetPos(cube.x, cube.y, cube.angle); break;
                     case 1: info1.SetPos(cube.x, cube.y, cube.angle); break;
@@ -68,19 +73,17 @@ namespace CubeMarker
             if (value)
             {
                 DuelCubeManager.Ins.isReal = true;
-                UpdateConnectUI(DuelCubeManager.Ins.isRealConnecting);
+                int cnt = DuelCubeManager.Ins.NumRealCubes;
+                UpdateConnectUI(cnt, DuelCubeManager.Ins.isRealConnecting);
                 UpdateCalib();
-                UpdateCubeInfos();
+                UpdateCubeInfos(cnt);
             }
         }
 
 
-        private void UpdateConnectUI(bool connecting)
+        private void UpdateConnectUI(int connectedCount, bool connecting)
         {
-            var ins = DuelCubeManager.Ins;
-            int connected = ins.NumRealCubes;
-
-            if (connected >= 4)
+            if (connectedCount >= 4)
             {
                 btnConnect.transform.GetComponentInChildren<TMP_Text>().text = "Connected";
                 btnConnect.interactable = false;
@@ -97,7 +100,7 @@ namespace CubeMarker
                 btnCalibrate.interactable = false;
 
             }
-            else if (connected > 0)
+            else if (connectedCount > 0)
             {
                 btnConnect.transform.GetComponentInChildren<TMP_Text>().text = "Connect";
                 btnConnect.interactable = true;
@@ -113,7 +116,7 @@ namespace CubeMarker
                 btnOK.interactable = true;
                 btnCalibrate.interactable = false;
             }
-            tipConnect.SetActive(connected == 0);
+            tipConnect.SetActive(connectedCount == 0);
         }
 
         private void UpdateCalib()
@@ -147,12 +150,11 @@ namespace CubeMarker
 
         }
 
-        private void UpdateCubeInfos()
+        private void UpdateCubeInfos(int connectedCount)
         {
-            int n = DuelCubeManager.Ins.NumRealCubes;
-            info0.SetActive(n>0); info1.SetActive(n>1);
-            info2.SetActive(n>2); info3.SetActive(n>3);
-            tipConnect.SetActive(n == 0);
+            info0.SetActive(connectedCount>0); info1.SetActive(connectedCount>1);
+            info2.SetActive(connectedCount>2); info3.SetActive(connectedCount>3);
+            tipConnect.SetActive(connectedCount == 0);
         }
 
 
@@ -162,21 +164,27 @@ namespace CubeMarker
         {
             Debug.Log("On UIConnect BtnConnect");
             var ins = DuelCubeManager.Ins;
+            int cnt = ins.NumRealCubes;
 
             if (ins.NumRealCubes >= 4) {}
-            else if (ins.isRealConnecting) {}
+            else if (ins.isRealConnecting)
+            {
+                UpdateConnectUI(cnt, true);
+            }
             else
             {
-            #if UNITY_WEBGL_RUNTIME
-                UpdateConnect(true);  // Connecting
+            #if UNITY_WEBGL && !UNITY_EDITOR
+                UpdateConnectUI(cnt, true);  // Connecting
                 var cubes = await ins.SingleConnectRealCube();
             #else
-                UpdateConnectUI(true);  // Connecting
+                UpdateConnectUI(cnt, true);  // Connecting
                 var cubes = await ins.MultiConnectRealCubes(4);
             #endif
             }
-            UpdateConnectUI(false);
-            UpdateCubeInfos();
+
+            cnt = DuelCubeManager.Ins.NumRealCubes;
+            UpdateConnectUI(cnt, false);
+            UpdateCubeInfos(cnt);
         }
 
         public void OnBtnDisconnect()
@@ -185,8 +193,8 @@ namespace CubeMarker
             var ins = DuelCubeManager.Ins;
             ins.DisconnectRealCubes();
 
-            UpdateConnectUI(false);
-            UpdateCubeInfos();
+            UpdateConnectUI(0, false);
+            UpdateCubeInfos(0);
         }
 
         private float redX, redY, redDeg;
