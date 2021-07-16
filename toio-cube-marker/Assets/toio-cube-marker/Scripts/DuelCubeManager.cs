@@ -44,23 +44,34 @@ namespace CubeMarker
         public Action<Cube, BLEPeripheralInterface> DisconnectedCallback = null;
 
 
-        public List<Cube> Cubes { get { return isReal? realManager.connectedCubes : simManager.connectedCubes; } }
         public List<Cube> RealCubes { get { return realManager.connectedCubes; } }
-        public List<Cube> SimCubes { get { return simManager.connectedCubes; } }
-        public List<CubeHandle> Handles { get { return isReal? realManager.connectedHandles : simManager.connectedHandles; } }
-        public List<CubeHandle> RealHandles { get { return realManager.connectedHandles; } }
-        public List<CubeHandle> SimHandles { get { return simManager.connectedHandles; } }
+        private List<Cube> SimCubes { get { return simManager.connectedCubes; } }
+        private List<CubeHandle> RealHandles { get { return realManager.connectedHandles; } }
+        private List<CubeHandle> SimHandles { get { return simManager.connectedHandles; } }
+
+        private List<Cube> assignedCubes = new List<Cube>();
+        private List<CubeHandle> assignedHandles = new List<CubeHandle>();
+        public int assignedCount { get {return assignedCubes.Count;} }
 
 
         public int NumRealCubes { get {return RealCubes.Count;} }
-        public int NumCubes { get {return Cubes.Count;} }
 
 
         public bool RequestCubes(int num)
         {
+            assignedCubes.Clear();
+            assignedHandles.Clear();
+
             if (isReal)
             {
-                return NumRealCubes >= num;
+                var handles = RealHandles;
+                if (handles.Count >= num)
+                {
+                    assignedCubes = RealCubes;
+                    assignedHandles = handles;
+                    return true;
+                }
+                else return false;
             }
             else
             {
@@ -76,14 +87,16 @@ namespace CubeMarker
             SetStandardIDCallback(null);
 
             ClearSimCubes();
+            assignedCubes.Clear();
+            assignedHandles.Clear();
         }
 
 
         public Vector3Int GetPose(byte idx)
         {
-            if (idx < NumCubes)
+            if (idx < assignedCount)
             {
-                var cube = Cubes[idx];
+                var cube = assignedCubes[idx];
                 return new Vector3Int(cube.x, cube.y, cube.angle);
             }
             else return Vector3Int.zero;
@@ -91,29 +104,29 @@ namespace CubeMarker
 
         public void Move(byte idx, int uL, int uR)
         {
-            if (idx < NumCubes)
+            if (idx < assignedCount)
             {
                 var translate = (uL + uR) / 2;
                 var rotate = uL - uR;
-                Handles[idx].Update();
-                var mv = Handles[idx].Move(translate, rotate, durationMs:2550, order:Cube.ORDER_TYPE.Strong);
+                assignedHandles[idx].Update();
+                var mv = assignedHandles[idx].Move(translate, rotate, durationMs:2550, order:Cube.ORDER_TYPE.Strong);
             }
             // else Debug.LogWarning("idx=" + idx + " >= cubes.Length=" + handles.Count);
         }
 
         public void MoveHome(Vector3Int[] homes)
         {
-            for (int i=0; i < NumCubes; i++)
+            for (int i=0; i < assignedCount; i++)
             {
                 if (i >= homes.Length) break;
                 var home = homes[i];
-                var cube = Cubes[i];
+                var cube = assignedCubes[i];
                 cube.TargetMove(home.x, home.y, home.z);
             }
         }
         public void StopMoveAll()
         {
-            foreach (var cube in Cubes)
+            foreach (var cube in assignedCubes)
             {
                 cube.Move(0 ,0, 0, order:Cube.ORDER_TYPE.Strong);
             }
@@ -151,6 +164,9 @@ namespace CubeMarker
             // Set border
             foreach (var handle in SimHandles)
                 SetHandleBorder(handle);
+
+            assignedCubes = SimCubes;
+            assignedHandles = SimHandles;
 
             isSimConnecting = false;
             isSimConnected = true;
@@ -198,15 +214,19 @@ namespace CubeMarker
 
         public async UniTask<Cube[]> MultiConnectRealCubes(int num = 4)
         {
-            if (isRealConnected) return RealCubes.ToArray();
+            if (NumRealCubes >= 4) return RealCubes.ToArray();
 
             isRealConnecting = true;
 
             // Connect
             var cubes = await realManager.MultiConnect(num);
+            Debug.LogWarning("         MultiConnectRealCubes: multi connect over " + (cubes==null));
+            Debug.LogWarning("         MultiConnectRealCubes:  " + cubes[0]);
+
             // Set callbacks
             foreach (var cube in cubes)
             {
+                Debug.LogWarning("M         ultiConnectRealCubes: cube=null " + (cube==null) + "  callback null " + (cube.idCallback==null));
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
             }
@@ -223,7 +243,7 @@ namespace CubeMarker
 
         public void DisconnectRealCubes()
         {
-            foreach (var cube in RealCubes)
+            realManager.DisconnectAll();
             isRealConnected = false;
         }
 
@@ -240,7 +260,7 @@ namespace CubeMarker
 
         private void IDCallback(Cube cube)
         {
-            byte cubeIdx = (byte) this.Cubes.IndexOf(cube);
+            byte cubeIdx = (byte) this.assignedCubes.IndexOf(cube);
             idCallback?.Invoke(cubeIdx, cube.x, cube.y, cube.angle);
         }
 
@@ -252,16 +272,17 @@ namespace CubeMarker
 
         private void StandardIDCallback(Cube cube)
         {
-            byte cubeIdx = (byte) this.Cubes.IndexOf(cube);
-            standardIDCallback?.Invoke(cubeIdx, Cubes[cubeIdx].standardId);
+            byte cubeIdx = (byte) this.assignedCubes.IndexOf(cube);
+            standardIDCallback?.Invoke(cubeIdx, cube.standardId);
         }
 
         public void RequestCallback()
         {
-            for (byte i = 0; i<Cubes.Count; i++)
+            var cubes = assignedCubes;
+            for (byte i = 0; i<cubes.Count; i++)
             {
-                idCallback?.Invoke(i, Cubes[i].x, Cubes[i].y, Cubes[i].angle);
-                standardIDCallback?.Invoke(i, Cubes[i].standardId);
+                idCallback?.Invoke(i, cubes[i].x, cubes[i].y, cubes[i].angle);
+                standardIDCallback?.Invoke(i, cubes[i].standardId);
             }
         }
         #endregion

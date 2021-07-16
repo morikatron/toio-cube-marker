@@ -246,7 +246,7 @@ namespace CubeMarker
 
         private IEnumerator IE_DelayedInit()
         {
-            yield return new WaitUntil( () => (DuelCubeManager.Ins.NumCubes >= numPlayers) );
+            yield return new WaitUntil( () => (DuelCubeManager.Ins.assignedCount >= numPlayers) );
             // yield return new WaitForSeconds(1);
             DelayedInit();
         }

@@ -168,17 +168,7 @@ namespace CubeMarker
 
             InitControllers();
             InitMarkers();
-
-            StartCoroutine(IE_DelayedInit());
         }
-
-        private IEnumerator IE_DelayedInit()
-        {
-            yield return new WaitUntil( () => (DuelCubeManager.Ins.NumCubes == numPlayers) );
-            // yield return new WaitForSeconds(1);
-            DelayedInit();
-        }
-        protected virtual void DelayedInit() {}
 
         private IEnumerator IE_CountdownToQuit(byte sec)
         {
