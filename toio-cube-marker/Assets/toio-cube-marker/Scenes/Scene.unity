@@ -2046,12 +2046,12 @@ PrefabInstance:
     - target: {fileID: 3315928000857944212, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
       propertyPath: m_Options.m_Options.Array.data[1].m_Text
-      value: Quiz
+      value: Image Quiz
       objectReference: {fileID: 0}
     - target: {fileID: 3315928000857944212, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
       propertyPath: m_Options.m_Options.Array.data[2].m_Text
-      value: QuizDiff
+      value: Multi-Image Quiz
       objectReference: {fileID: 0}
     - target: {fileID: 3315928000857944212, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
@@ -2131,7 +2131,7 @@ PrefabInstance:
     - target: {fileID: 3315928000857944213, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 330
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 3315928000857944213, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
@@ -2513,7 +2513,7 @@ PrefabInstance:
     - target: {fileID: 3315928000857944213, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 330
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 3315928000857944213, guid: 0610784020f73f94cad837d84e024e9f,
         type: 3}
@@ -6699,8 +6699,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 24, y: -24}
-  m_SizeDelta: {x: -48, y: -48}
+  m_AnchoredPosition: {x: 16, y: -15.999985}
+  m_SizeDelta: {x: -32, y: -32}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &486953566
 MonoBehaviour:
@@ -6721,7 +6721,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Compete by painting more area.
+  m_text: "A battle to cover as much area as possible with your cube, using the cube
+    as a paint brush.\n\n\u30AD\u30E5\u30FC\u30D6\u3092\u8D70\u3089\u305B\u3066\u8272\u3092\u5857\u308A\u3001\u6307\u5B9A\u3057\u305F\u6642\u9593\u5185\u3067\u5857\u3063\u305F\u9762\u7A4D\u3092\u7AF6\u3044\u5408\u3046\u30D0\u30C8\u30EB\u30B2\u30FC\u30E0\u3067\u3059\u3002"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 187bacc9d8617264f8e2686847cfa9d8, type: 2}
   m_sharedMaterial: {fileID: -538991968475975080, guid: 187bacc9d8617264f8e2686847cfa9d8,
@@ -6994,7 +6995,7 @@ PrefabInstance:
     - target: {fileID: 6041786888938322197, guid: 55f277cadedf27040896c1652ddab5bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 6041786888938322197, guid: 55f277cadedf27040896c1652ddab5bc,
         type: 3}
@@ -8883,8 +8884,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -108.3, y: 84}
-  m_SizeDelta: {x: 111, y: 5}
+  m_AnchoredPosition: {x: -79.45, y: 77.2}
+  m_SizeDelta: {x: 82.14624, y: 5}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &709355615
 MonoBehaviour:
@@ -13181,7 +13182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -358}
+  m_AnchoredPosition: {x: 0, y: -244}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1049743242
@@ -16095,7 +16096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1244400121
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20687,7 +20688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 123}
+  m_AnchoredPosition: {x: 0, y: 141}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1576887531
@@ -26070,7 +26071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1841459508
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26210,7 +26211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1845373729
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28638,8 +28639,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 803, y: 0}
-  m_SizeDelta: {x: 790.5078, y: 216.22429}
+  m_AnchoredPosition: {x: 803, y: 14.2}
+  m_SizeDelta: {x: 790.5078, y: 235.53969}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2037143519
 MonoBehaviour:

@@ -299,13 +299,13 @@ namespace CubeMarker
             else if (mode == RoomPropEnum_Mode.Quiz)
             {
                 if (teamIdx == TeamIdx_Painter)
-                    textTip.text = "Uncover image and answer what's on it.\n画像をむき出して名前を当てよう!";
+                    textTip.text = "Uncover image and guess what's on it.\n画像を浮かび上がらせて内容を当てよう!";
                 else
-                    textTip.text = "Prevent opponents of finding what's on image.\n相手が答えを見つけるのを阻止せよ!";
+                    textTip.text = "Prevent opponents from finding what's on image.\n相手が答えを見つけるのを阻止せよ!";
             }
             else if (mode == RoomPropEnum_Mode.QuizDiff)
             {
-                textTip.text = "Uncover own image and answer faster!\n自チームの画像をむき出して名前を一はやく当てよう!";
+                textTip.text = "Uncover own image and guess faster!\n自チームの画像を浮かび上がらせて内容を一はやく当てよう!";
             }
         }
 

@@ -168,19 +168,19 @@ namespace CubeMarker
             int idx = areaMode.GetComponentInChildren<TMP_Dropdown>().value;
             if (idx == 0)   // battle
             {
-                tip.text = "Compete by painting more area.\n\n塗った面積の大きいチームが勝ち。";
+                tip.text = "A battle to cover as much area as possible with your cube, using the cube as a paint brush.\n\nキューブを走らせて色を塗り、指定した時間内で塗った面積を競い合うバトルゲームです。";
                 areaQuizSetting.gameObject.SetActive(false);
                 btnCustomQuiz.SetActive(false);
             }
             else if (idx == 1)  // quiz
             {
-                tip.text = "A team uncovers an image to answer what's on it (each member has 1 chance); Another team paints color to conceal it.\n\n赤チームは画像をむき出して名前を当てる(一人1回); 青チームは相手を阻止する。";
+                tip.text = "A quiz game where you have to guess which image lies underneath using cubes to peel away the mask. (Only one chance to answer) \n\nキューブを走らせることで、浮かび上がる画像の内容をあてるクイズゲームです。対戦側のチームがその邪魔をしてきます。(回答のチャンスは1回のみ)";
                 areaQuizSetting.gameObject.SetActive(true);
                 OnQuizSettingChanged();
             }
             else if (idx == 2)  // quizdiff
             {
-                tip.text = "Each team aims to uncover own image and answers correctly faster.\n\n自チームの画像をむき出して名前を一はやく当てる(一人1回)。";
+                tip.text = "A quiz game where each player tries to uncover their image while the other are competing for the same space. (Only one chance to answer) \n\nチーム毎に異なる画像を浮かび上がらせ、その内容をあてるクイズゲームです。(回答のチャンスは1回のみ)";
                 areaQuizSetting.gameObject.SetActive(true);
                 OnQuizSettingChanged();
             }
