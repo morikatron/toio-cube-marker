@@ -158,7 +158,9 @@ namespace CubeMarker
             // Set callbacks
             foreach (var cube in cubes)
             {
+                cube.idCallback.RemoveListener("DuelCubeManager");
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
+                cube.standardIdCallback.RemoveListener("DuelCubeManager");
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
             }
             // Set border
@@ -197,7 +199,9 @@ namespace CubeMarker
             // Set callbacks
             if (cube != null)
             {
+                cube.idCallback.RemoveListener("DuelCubeManager");
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
+                cube.standardIdCallback.RemoveListener("DuelCubeManager");
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
             }
             // Set border
@@ -220,14 +224,13 @@ namespace CubeMarker
 
             // Connect
             var cubes = await realManager.MultiConnect(num);
-            Debug.LogWarning("         MultiConnectRealCubes: multi connect over " + (cubes==null));
-            Debug.LogWarning("         MultiConnectRealCubes:  " + cubes[0]);
 
             // Set callbacks
             foreach (var cube in cubes)
             {
-                Debug.LogWarning("M         ultiConnectRealCubes: cube=null " + (cube==null) + "  callback null " + (cube.idCallback==null));
+                cube.idCallback.RemoveListener("DuelCubeManager");
                 cube.idCallback.AddListener("DuelCubeManager", IDCallback);
+                cube.standardIdCallback.RemoveListener("DuelCubeManager");
                 cube.standardIdCallback.AddListener("DuelCubeManager", StandardIDCallback);
             }
             // Set border

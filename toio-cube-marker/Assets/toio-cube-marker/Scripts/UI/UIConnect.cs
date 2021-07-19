@@ -74,7 +74,8 @@ namespace CubeMarker
             {
                 DuelCubeManager.Ins.isReal = true;
                 int cnt = DuelCubeManager.Ins.NumRealCubes;
-                UpdateConnectUI(cnt, DuelCubeManager.Ins.isRealConnecting);
+                Debug.Log("UIConnect.SetActive: cnt=" + cnt);
+                UpdateConnectUI(cnt, false);
                 UpdateCalib();
                 UpdateCubeInfos(cnt);
             }
@@ -166,23 +167,30 @@ namespace CubeMarker
             var ins = DuelCubeManager.Ins;
             int cnt = ins.NumRealCubes;
 
-            if (ins.NumRealCubes >= 4) {}
-            else if (ins.isRealConnecting)
+            try
             {
-                UpdateConnectUI(cnt, true);
+                if (ins.NumRealCubes >= 4) {}
+                else if (ins.isRealConnecting)
+                {
+                    UpdateConnectUI(cnt, true);
+                }
+                else
+                {
+                #if UNITY_WEBGL && !UNITY_EDITOR
+                    UpdateConnectUI(cnt, true);  // Connecting
+                    var cubes = await ins.SingleConnectRealCube();
+                #else
+                    UpdateConnectUI(cnt, true);  // Connecting
+                    var cubes = await ins.MultiConnectRealCubes(4);
+                #endif
+                }
             }
-            else
+            catch (System.Exception e)
             {
-            #if UNITY_WEBGL && !UNITY_EDITOR
-                UpdateConnectUI(cnt, true);  // Connecting
-                var cubes = await ins.SingleConnectRealCube();
-            #else
-                UpdateConnectUI(cnt, true);  // Connecting
-                var cubes = await ins.MultiConnectRealCubes(4);
-            #endif
+                Debug.LogError("UIConnect.OnBtnConnect()\n" + e);
             }
 
-            cnt = DuelCubeManager.Ins.NumRealCubes;
+            cnt = ins.NumRealCubes;
             UpdateConnectUI(cnt, false);
             UpdateCubeInfos(cnt);
         }
