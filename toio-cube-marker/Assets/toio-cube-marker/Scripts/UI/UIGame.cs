@@ -187,7 +187,7 @@ namespace CubeMarker
         {
             // Create Marker
             CubeMarker marker = Instantiate(cubeMarkerPrefab, new Vector3(-10000, 0, 0), Quaternion.identity);
-            marker.transform.SetParent(markersLayer);
+            marker.transform.SetParent(markersLayer, false);
             marker.SetLED(TeamColors[team]);
             marker.field = field;
             marker.UpdateSize();
@@ -195,7 +195,7 @@ namespace CubeMarker
 
             // Create Nameplate
             Nameplate plate = Instantiate(nameplatePrefab, new Vector3(-10000, 0, 0), Quaternion.identity);
-            plate.transform.SetParent(nameplateLayer);
+            plate.transform.SetParent(nameplateLayer, false);
             plate.SetName(name);
             plate.marker = marker;
             nameplates.Add(plate);
