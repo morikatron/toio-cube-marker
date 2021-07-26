@@ -6,7 +6,7 @@
 
 <br>
 
-これは [**toio SDK for unity**](https://github.com/morikatron/toio-sdk-for-unity)（バージョン1.3.0）を利用したサンプルプログラムです。最大4人のプレイヤーが、一つのフィールド上に置かれた toio™コア キューブ（以降キューブ）を操縦し、色を塗る面積を競ったり、画像を掻き出してそこに描かれた内容を解答するゲームです。
+これは [**toio SDK for unity**](https://github.com/morikatron/toio-sdk-for-unity)（バージョン1.3.0）を利用したサンプルプログラムです。最大4人のプレイヤーが、一つのフィールド上に置かれた toio™コアキューブ（以降キューブ）を操縦し、色を塗る面積を競ったり、画像を掻き出してそこに描かれた内容を解答するゲームです。
 
 #### ３つのゲームモード
 - **`Battle`** ：キューブを走らせて色を塗り、指定した時間内で塗った面積を競い合うゲームです。
@@ -14,31 +14,45 @@
 - **`Multi-Image Quiz`** ：チーム毎に異なる画像を浮かび上がらせ、その内容をあてるクイズゲームです。(回答のチャンスは1回のみ)
 
 #### 主な特徴
-- シミュレータでも、リアルキューブでもゲームをホストすることが可能です；
-- ゲーム画面を表示するモニター上に、簡易マットを敷くことで、リアルな「色塗り」を体験できます；
-- **`Image Quiz`** と **`Multi-Image Quiz`** に使用する画像をカスタマイズできます；
+- 最大４人のプレイヤーがオンラインで遊ぶことが可能です。
+- ゲームのルームを作成する際、シミュレーターとリアルキューブのどちらでもゲームをホストすることができます。
+- リアルのキューブを使って遊ぶ際はゲーム画面を表示するモニターの上に、簡易マットを敷くことで、リアルな「色塗り」を体験できます。
+- `Image Quiz` と `Multi-Image Quiz` では自分な好きな画像でゲームをカスタマイズすることができます；
 - (開発者向け) インターフェイスを継承する形で、AI プレイヤーを簡単にカスタマイズできます；
 
 > ※「簡易マット」の正式名称は「toio™コア キューブ（単体）付属の簡易プレイマット」です。
 
 ## セットアップ
 
+- Unity Hub で「リストに追加」ボタンを押して、ダウンロードされたフォルダの下にある「toio-cube-marker」フォルダを選択してください。
+- リストに表示された「toio-cube-marker」をクリックしてプロジェクトを開きます。
+- エディタの「プロジェクト」で「Assets/toio-cube-marker/Scenes/Scene.unity」をクリックしてシーンを開きます。
+  - 「TMP Importer」というダイアログが表示されると、「Import TMP Essentials」を押してください。
+
 ### Unity プロジェクトのセットアップ
 
 以下のパッケージを入手してインポートしてください。
 
-- [**toio SDK for unity**](https://github.com/morikatron/toio-sdk-for-unity) (対応バージョン 1.3.0)
-  - [【ドキュメント】](https://github.com/morikatron/toio-sdk-for-unity/blob/main/docs/download_sdk.md) に従ってセットアップしてください。
-- **TextMeshPro**
-  - プロジェクトを開くと「インポートしますか」のようなダイアログが表示されますので、そのダイアログでインポートボタンを押してください。
-  - あるいは Package Manager で検索してインポートします。
-- [**Photon 2 - Free**](https://assetstore.unity.com/packages/tools/network/pun-2-free-119922) (テスト済みバージョン 2.30.0)
-  - Photon を使うには、AppId を取得して設定する必要があります、[【こちら】](https://doc.photonengine.com/en-us/pun/current/demos-and-tutorials/pun-basics-tutorial/intro#let_s_go__importing_pun_and_setup) を参考にしてください。
-  - AppId の設定は Photon をインポートする際に表示されるダイアログの他、「Photon/PhotonUnityNetworking/Resources/PhotonServerSettings」で設定することもできます。
+- **TextMeshPro**：高度な制御ができるテキストアセット
+  - 前述通りにシーンを初めて開く時に「TMP Importer」というダイアログでインポートできます。
+  - もしくは Package Manager で「TextMeshPro」で検索してインポートします。(検索の範囲を「Unity Registry」に切り替えてください)
+- **toio SDK for unity**：toio™コアキューブを制御するためのSDK (対応バージョン 1.3.0)
+  - [【こちら】](https://github.com/morikatron/toio-sdk-for-unity/releases/tag/v1.3.0) からバージョン 1.3.0 のunityパッケージをダウンロードしてください。
+  - [【ドキュメント】](https://github.com/morikatron/toio-sdk-for-unity/blob/main/docs/download_sdk.md#unitask-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB) を参考にして、Unitask と toio SDK for unity をインポートしてください。
+- **Photon 2 - Free**：ネットワークエンジン (テスト済みバージョン 2.30.0)
+  - [【こちら】](https://assetstore.unity.com/packages/tools/network/pun-2-free-119922) からインポートしてください。
+  - Photon を使うには、事前に AppID を取得して設定する必要があります、[【こちら】](https://doc.photonengine.com/en-us/pun/current/demos-and-tutorials/pun-basics-tutorial/intro#let_s_go__importing_pun_and_setup) を参考にしてください。
+    - Photon をインポートする際に表示されたダイアログにメールアドレスを入力すると、AppIDが自動的に発行されます。
+    - Photon のウェブページ上でログインして、ダッシュボードで「CREATE A NEW APP」でAppIDを取得することもできます。
+<br><p align="center"><img width=360 src="res/photon.png"/></p>
+  - AppID の設定は上記ダイアログの他、「Photon/PhotonUnityNetworking/Resources/PhotonServerSettings」で設定することもできます。
   - 上記「PhotonServerSettings」で、サーバー地域を指定することをおすすめします（日本の場合は「jp」）。指定しない場合は、アプリ実行時のネット環境によって違うサーバーに自動配分される可能性があります。
-- [**Joystick Pack**](https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631) (テスト済みバージョン 2.1.0)
-- [**WebGLInput**](https://github.com/kou-yeung/WebGLInput/releases) : WebGLのビルドで、コピー・ペーストを可能にするライブラリ
-  - このライブラリを使わなくてもエラーは出ませんので、インストールしても、しなくてもかまいません。
+- **Joystick Pack**：バーチャルジョイスティックを簡単に実装できるアセット (テスト済みバージョン 2.1.0)
+  - [【こちら】](https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631) からインポートしてください。
+- **WebGLInput**() : WebGLのビルドで、コピー・ペーストを可能にするアセット
+  - [【こちら】](https://github.com/kou-yeung/WebGLInput/releases) からインポートしてください。
+  - ビルド先にWebGLを指定する際、必要となります。
+  - このアセットを使わなくてもエラーは出ませんので、インストールしても、しなくてもかまいません。
 
 ### リアル環境のセットアップ
 
@@ -50,11 +64,11 @@
 - モニター
 
 手順
-- モニターを水平にします；
-- モニターの上に（なるべく中央に）簡易マットを敷きます；
-- 画面ミラーリングなどの機能を利用して、ゲーム画面をモニターに表示させます；
-- アプリを起動し、キューブ接続・校正画面でリアルキューブを接続した後、校正を行い、モニター上表示されたマットとリアルの簡易マットとを一致させます；
-- リモートの友達と対戦の場合は、ウェブカメラでリアル環境の映像を共有するのも良いです；
+- モニターを水平にします。
+- モニターの上に（なるべく中央に）簡易マットを敷きます。
+- 画面ミラーリングなどの機能を利用して、ゲーム画面をモニターに表示させます。
+- アプリを起動し、キューブ接続・校正画面でリアルキューブを接続した後、校正を行い、モニター上表示されたマットとリアルの簡易マットとを一致させます。
+- リモートの友達と対戦の場合は、ウェブカメラでリアル環境の映像を共有するのも良いです。
 - ルーム作成してゲームを開始し、リアルのキューブと簡易マットに透けて見える「色/画像」を見ながら遊びます。
 
 
