@@ -57,8 +57,8 @@
 - **Photon 2 - Free**：ネットワークエンジン (テスト済みバージョン 2.30.0)
   - [【こちら】](https://assetstore.unity.com/packages/tools/network/pun-2-free-119922) からインポートしてください。
   - Photon を使うには、事前に AppID を取得して設定する必要があります、[【こちら】](https://doc.photonengine.com/en-us/pun/current/demos-and-tutorials/pun-basics-tutorial/intro#let_s_go__importing_pun_and_setup) を参考にしてください。
-    - Photon をインポートする際に表示されたダイアログにメールアドレスを入力すると、AppIDが自動的に発行されます。
-    - Photon のウェブページ上でログインして、ダッシュボードで「CREATE A NEW APP」でAppIDを取得することもできます。
+    - Photon をインポートする際に表示されたダイアログにメールアドレスを入力すると、AppID が自動的に発行されます。
+    - Photon のウェブページ上でログインして、ダッシュボードで「CREATE A NEW APP」で AppID を取得することもできます。(タイプは「Realtime」です)
 <br><p align="center"><img width=360 src="res/photon.png"/></p>
   - AppID の設定は上記ダイアログの他、「Photon/PhotonUnityNetworking/Resources/PhotonServerSettings」で設定することもできます。
   - 上記「PhotonServerSettings」で、サーバー地域を指定することをおすすめします（日本の場合は「jp」）。指定しない場合は、アプリ実行時のネット環境によって違うサーバーに自動配分される可能性があります。
