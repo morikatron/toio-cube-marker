@@ -53,7 +53,8 @@
   - もしくは Package Manager で「TextMeshPro」で検索してインポートします。(検索の範囲を「Unity Registry」に切り替えてください)
 - **toio SDK for unity**：toio™コアキューブを制御するためのSDK (対応バージョン 1.3.0)
   - [【こちら】](https://github.com/morikatron/toio-sdk-for-unity/releases/tag/v1.3.0) からバージョン 1.3.0 のunityパッケージをダウンロードしてください。
-  - [【ドキュメント】](https://github.com/morikatron/toio-sdk-for-unity/blob/main/docs/download_sdk.md#unitask-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB) を参考にして、Unitask と toio SDK for unity をインポートしてください。
+  - [【ドキュメント】](https://github.com/morikatron/toio-sdk-for-unity/tree/v1.3.0/docs/download_sdk.md#unitask-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB) を参考にして、Unitask と toio SDK for unity をインポートしてください。
+  - Mac で BLE Plugin を使う場合は、[【こちら】](https://github.com/morikatron/toio-sdk-for-unity/tree/v1.3.0/docs/usage_macble.md) を参考にしてセットアップしてください。
 - **Photon 2 - Free**：ネットワークエンジン (テスト済みバージョン 2.30.0)
   - [【こちら】](https://assetstore.unity.com/packages/tools/network/pun-2-free-119922) からインポートしてください。
   - Photon を使うには、事前に AppID を取得して設定する必要があります、[【こちら】](https://doc.photonengine.com/en-us/pun/current/demos-and-tutorials/pun-basics-tutorial/intro#let_s_go__importing_pun_and_setup) を参考にしてください。
